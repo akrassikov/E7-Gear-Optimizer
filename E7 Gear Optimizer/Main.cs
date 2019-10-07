@@ -14,6 +14,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using E7_Gear_Optimizer.Ocr;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -2792,6 +2793,64 @@ namespace E7_Gear_Optimizer
             enemyDef = Properties.Settings.Default.EnemyDefence = (int)nud_EnemyDef.Value;
             updateCurrentGear();
             dgv_OptimizeResults.Refresh();
+        }
+
+        private void b_OcrImportFromCliboard_Click(object sender, EventArgs e)
+        {
+            // get image from clipboard
+            // prepare image for OCR
+            // send image to OCR library
+            // retrieve results from OCR
+            // populate the item text fields and dropdowns
+
+            var ocrParser = new OcrParser();
+
+            // parse item from clipboard image
+            try
+            {
+                var item = ocrParser.ParseItemFromClipboard();
+
+                if (item == null)
+                {
+                    // error, could not read image from clipboard
+                    MessageBox.Show("No image found in clipboard.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                InputItemDataIntoCurrentSelectedItem(item);
+            }
+            catch
+            {
+                MessageBox.Show("Error parsing item from image.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void InputItemDataIntoCurrentSelectedItem(Item item)
+        {
+            // set type, grade, set
+            if (item.Type != ItemType.All || item.Type != ItemType.Artifact)
+            {
+                ((RadioButton)p_Type.Controls.Find("rb_" + item.Type.ToString() + "Type", false)[0]).Checked = true;
+            }
+            ((RadioButton)p_Grade.Controls.Find("rb_" + item.Grade.ToString() + "Grade", false)[0]).Checked = true;
+            ((RadioButton)p_Set.Controls.Find("rb_" + item.Set.ToString() + "Set", false)[0]).Checked = true;
+
+
+            // set main stat
+            lb_Main.SelectedIndex = lb_Main.FindStringExact(item.Main.Name.ToString().Replace("Percent", "%"));
+            var convertedValue = item.Main.Value < 1 ? item.Main.Value * 100 : item.Main.Value;
+            nud_Main.Value = (int)convertedValue;
+
+            // set substats
+            for (var i = 0; i < item.SubStats.Length; i++)
+            {
+                var listBoxSubStat = ((ListBox)tb_Inventory.Controls.Find("lb_Sub" + (i + 1), false)[0]);
+                listBoxSubStat.SelectedIndex = listBoxSubStat.FindStringExact(item.SubStats[i].Name.ToString().Replace("Percent", "%"));
+                convertedValue = item.SubStats[i].Value < 1 ? item.SubStats[i].Value * 100 : item.SubStats[i].Value;
+                ((NumericUpDown)tb_Inventory.Controls.Find("nud_Sub" + (i + 1), false)[0]).Value = (int)convertedValue;
+            }
         }
     }
 }
