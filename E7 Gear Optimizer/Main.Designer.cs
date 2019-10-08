@@ -40,6 +40,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tb_Inventory = new System.Windows.Forms.TabPage();
+            this.gb_OcrButtons = new System.Windows.Forms.GroupBox();
+            this.b_OcrImportFromFile = new System.Windows.Forms.Button();
+            this.b_OcrImportFromCliboard = new System.Windows.Forms.Button();
             this.l_ItemCount = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.tc_InventorySets = new System.Windows.Forms.TabControl();
@@ -499,10 +502,9 @@
             this.ofd_import = new System.Windows.Forms.OpenFileDialog();
             this.sfd_export = new System.Windows.Forms.SaveFileDialog();
             this.tt_Skills = new System.Windows.Forms.ToolTip(this.components);
-            this.gb_OcrButtons = new System.Windows.Forms.GroupBox();
-            this.b_OcrImportFromCliboard = new System.Windows.Forms.Button();
-            this.b_OcrImportFromFile = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tb_Inventory.SuspendLayout();
+            this.gb_OcrButtons.SuspendLayout();
             this.tc_InventorySets.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_ItemLocked)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Equipped)).BeginInit();
@@ -564,7 +566,6 @@
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud1_SpeedTunerImprint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb1_SpeedTuner)).BeginInit();
-            this.gb_OcrButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tb_Inventory
@@ -609,6 +610,37 @@
             this.tb_Inventory.TabIndex = 1;
             this.tb_Inventory.Text = "Inventory";
             this.tb_Inventory.UseVisualStyleBackColor = true;
+            // 
+            // gb_OcrButtons
+            // 
+            this.gb_OcrButtons.Controls.Add(this.b_OcrImportFromFile);
+            this.gb_OcrButtons.Controls.Add(this.b_OcrImportFromCliboard);
+            this.gb_OcrButtons.Location = new System.Drawing.Point(1146, 588);
+            this.gb_OcrButtons.Name = "gb_OcrButtons";
+            this.gb_OcrButtons.Size = new System.Drawing.Size(176, 71);
+            this.gb_OcrButtons.TabIndex = 35;
+            this.gb_OcrButtons.TabStop = false;
+            this.gb_OcrButtons.Text = "OCR Import";
+            // 
+            // b_OcrImportFromFile
+            // 
+            this.b_OcrImportFromFile.Location = new System.Drawing.Point(90, 19);
+            this.b_OcrImportFromFile.Name = "b_OcrImportFromFile";
+            this.b_OcrImportFromFile.Size = new System.Drawing.Size(75, 40);
+            this.b_OcrImportFromFile.TabIndex = 1;
+            this.b_OcrImportFromFile.Text = "From File";
+            this.b_OcrImportFromFile.UseVisualStyleBackColor = true;
+            this.b_OcrImportFromFile.Click += new System.EventHandler(this.b_OcrImportFromFile_Click);
+            // 
+            // b_OcrImportFromCliboard
+            // 
+            this.b_OcrImportFromCliboard.Location = new System.Drawing.Point(9, 19);
+            this.b_OcrImportFromCliboard.Name = "b_OcrImportFromCliboard";
+            this.b_OcrImportFromCliboard.Size = new System.Drawing.Size(75, 40);
+            this.b_OcrImportFromCliboard.TabIndex = 0;
+            this.b_OcrImportFromCliboard.Text = "From Clipboard";
+            this.b_OcrImportFromCliboard.UseVisualStyleBackColor = true;
+            this.b_OcrImportFromCliboard.Click += new System.EventHandler(this.b_OcrImportFromCliboard_Click);
             // 
             // l_ItemCount
             // 
@@ -5858,35 +5890,9 @@
             this.sfd_export.FileName = "E7 Gear Optimizer.json";
             this.sfd_export.Filter = "JSON|*.json";
             // 
-            // gb_OcrButtons
+            // openFileDialog1
             // 
-            this.gb_OcrButtons.Controls.Add(this.b_OcrImportFromFile);
-            this.gb_OcrButtons.Controls.Add(this.b_OcrImportFromCliboard);
-            this.gb_OcrButtons.Location = new System.Drawing.Point(1146, 588);
-            this.gb_OcrButtons.Name = "gb_OcrButtons";
-            this.gb_OcrButtons.Size = new System.Drawing.Size(176, 71);
-            this.gb_OcrButtons.TabIndex = 35;
-            this.gb_OcrButtons.TabStop = false;
-            this.gb_OcrButtons.Text = "OCR Import";
-            // 
-            // b_OcrImportFromCliboard
-            // 
-            this.b_OcrImportFromCliboard.Location = new System.Drawing.Point(9, 19);
-            this.b_OcrImportFromCliboard.Name = "b_OcrImportFromCliboard";
-            this.b_OcrImportFromCliboard.Size = new System.Drawing.Size(75, 40);
-            this.b_OcrImportFromCliboard.TabIndex = 0;
-            this.b_OcrImportFromCliboard.Text = "From Clipboard";
-            this.b_OcrImportFromCliboard.UseVisualStyleBackColor = true;
-            this.b_OcrImportFromCliboard.Click += new System.EventHandler(this.b_OcrImportFromCliboard_Click);
-            // 
-            // b_OcrImportFromFile
-            // 
-            this.b_OcrImportFromFile.Location = new System.Drawing.Point(90, 19);
-            this.b_OcrImportFromFile.Name = "b_OcrImportFromFile";
-            this.b_OcrImportFromFile.Size = new System.Drawing.Size(75, 40);
-            this.b_OcrImportFromFile.TabIndex = 1;
-            this.b_OcrImportFromFile.Text = "From File";
-            this.b_OcrImportFromFile.UseVisualStyleBackColor = true;
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Main
             // 
@@ -5906,6 +5912,7 @@
             this.Shown += new System.EventHandler(this.Main_Shown);
             this.tb_Inventory.ResumeLayout(false);
             this.tb_Inventory.PerformLayout();
+            this.gb_OcrButtons.ResumeLayout(false);
             this.tc_InventorySets.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pb_ItemLocked)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Equipped)).EndInit();
@@ -5985,7 +5992,6 @@
             this.tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud1_SpeedTunerImprint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb1_SpeedTuner)).EndInit();
-            this.gb_OcrButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -6455,6 +6461,7 @@
         private System.Windows.Forms.GroupBox gb_OcrButtons;
         private System.Windows.Forms.Button b_OcrImportFromFile;
         private System.Windows.Forms.Button b_OcrImportFromCliboard;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

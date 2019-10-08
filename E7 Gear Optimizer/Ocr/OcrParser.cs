@@ -19,22 +19,33 @@ namespace E7_Gear_Optimizer.Ocr
             if (Clipboard.ContainsImage())
             {
                 var clipboardImage = Clipboard.GetImage();
-
-                // create bmp and modify the image to increase OCR accuracy
                 var bmp = new Bitmap(clipboardImage);
-                bmp = ImageManipulation.InvertImageColors(bmp);
-                bmp = ImageManipulation.MakeGrayscale(bmp);
-                bmp = ResizeTo1080(bmp);
-                var region = CalculateRegion(bmp);
-
-                // parse text from image
-                var text = TesseractService.ParseText(bmp, region);
-
-                var item = ParseOcrData(text);
-                return item;
+                return ParseImage(bmp);
             }
 
             return null;
+        }
+
+        public Item ParseItemFromFile(string pathToFile)
+        {
+            var bmp = new Bitmap(pathToFile);
+            return ParseImage(bmp);
+        }
+
+        private Item ParseImage(Bitmap bmp)
+        {
+            // preprocess the image to increase OCR accuracy
+            bmp = ImageManipulation.InvertImageColors(bmp);
+            bmp = ImageManipulation.MakeGrayscale(bmp);
+            bmp = ResizeTo1080(bmp);
+            var region = CalculateRegion(bmp);
+
+            // parse text from image
+            var text = TesseractService.ParseText(bmp, region);
+            bmp.Dispose();
+
+            var item = ParseOcrData(text);
+            return item;
         }
 
         private Bitmap ResizeTo1080(Bitmap bmp)

@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -2797,22 +2798,14 @@ namespace E7_Gear_Optimizer
 
         private void b_OcrImportFromCliboard_Click(object sender, EventArgs e)
         {
-            // get image from clipboard
-            // prepare image for OCR
-            // send image to OCR library
-            // retrieve results from OCR
-            // populate the item text fields and dropdowns
-
-            var ocrParser = new OcrParser();
-
-            // parse item from clipboard image
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
+                var ocrParser = new OcrParser();
                 var item = ocrParser.ParseItemFromClipboard();
 
                 if (item == null)
                 {
-                    // error, could not read image from clipboard
                     MessageBox.Show("No image found in clipboard.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -2824,6 +2817,45 @@ namespace E7_Gear_Optimizer
             {
                 MessageBox.Show("Error parsing item from image.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private void b_OcrImportFromFile_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    var ocrParser = new OcrParser();
+                    var item = ocrParser.ParseItemFromFile(openFileDialog1.FileName);
+                    if (item == null)
+                    {
+                        MessageBox.Show("Could not read image file.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    
+                    InputItemDataIntoCurrentSelectedItem(item);
+                }
+                catch (SecurityException ex)
+                {
+                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                    $"Details:\n\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error reading file.\n\nError message: {ex.Message}", 
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    Cursor.Current = Cursors.Default;
+                }
             }
         }
 
